@@ -101,9 +101,14 @@ public class Tetromino : MonoBehaviour
 
     void Lock()
     {
-        AddToGrid();
-        FindObjectOfType<Spawner>().SpawnNext();
-        Destroy(gameObject);
+        foreach (Transform child in transform)
+        {
+            int x = Mathf.RoundToInt(child.position.x);
+            int y = Mathf.RoundToInt(child.position.y);
+
+            GridManager.grid[x, y] = child;
+            child.parent = null; 
+        }
     }
 
     bool IsValid()
