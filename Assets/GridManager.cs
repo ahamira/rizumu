@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+
 public class GridManager : MonoBehaviour
 {
     public static int width = 10;
@@ -8,7 +9,13 @@ public class GridManager : MonoBehaviour
 
     public TextMeshProUGUI scoreText;
     public static GridManager instance;
+
     public static Transform[,] grid = new Transform[10, 20];
+
+    void Awake()
+    {
+        instance = this;
+    }
 
     public static bool Inside(int x, int y)
     {
@@ -19,8 +26,11 @@ public class GridManager : MonoBehaviour
     {
         for (int x = 0; x < width; x++)
         {
-            Destroy(grid[x, y].gameObject);
-            grid[x, y] = null;
+            if (grid[x, y] != null)
+            {
+                Destroy(grid[x, y].gameObject);
+                grid[x, y] = null;
+            }
         }
     }
 
@@ -38,8 +48,8 @@ public class GridManager : MonoBehaviour
         {
             instance.scoreText.text = "Score: " + score;
         }
-
     }
+
     public static void MoveDown(int fromY)
     {
         for (int y = fromY; y < height; y++)
