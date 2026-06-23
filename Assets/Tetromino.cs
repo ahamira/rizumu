@@ -138,7 +138,7 @@ public class Tetromino : MonoBehaviour
                 y < 0 || y >= GridManager.height)
                 return false;
 
-            if (GridManager.grid[x, y] != null)
+            if (y < GridManager.height && GridManager.grid[x, y] != null)
                 return false;
         }
         return true;

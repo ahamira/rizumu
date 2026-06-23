@@ -14,6 +14,9 @@ public class Spawner : MonoBehaviour
 
     public void SpawnNext()
     {
+        if (GridManager.isGameOver)
+            return;
+
         if (bag.Count == 0)
             FillBag();
 
@@ -21,9 +24,10 @@ public class Spawner : MonoBehaviour
         bag.RemoveAt(0);
 
         GameObject obj = Instantiate(piece, transform.position, Quaternion.identity);
-
-        if (!IsSpawnValid(obj))
+      
+        if (IsGameOver(obj))
         {
+
             GridManager.instance.GameOver();
             return;
         }
@@ -70,16 +74,22 @@ public class Spawner : MonoBehaviour
         }
         return true;
     }
-    bool IsSpawnValid(GameObject obj)
+    bool IsGameOver(GameObject obj)
     {
         foreach (Transform child in obj.transform)
         {
             int x = Mathf.RoundToInt(child.position.x);
             int y = Mathf.RoundToInt(child.position.y);
 
+            if (x < 0 || x >= GridManager.width ||
+                y < 0 || y >= GridManager.height)
+            {
+                continue;
+            }
+
             if (GridManager.grid[x, y] != null)
-                return false;
+                return true;
         }
-        return true;
+        return false;
     }
 }

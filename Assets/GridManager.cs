@@ -10,6 +10,7 @@ public class GridManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public static GridManager instance;
     public GameObject gameOverText;
+    public static bool isGameOver = false;
 
     public static Transform[,] grid = new Transform[10, 20];
 
@@ -68,12 +69,21 @@ public class GridManager : MonoBehaviour
     }
     public void GameOver()
     {
+        if (isGameOver) return;
+
+        isGameOver = true;
+
         gameOverText.SetActive(true);
-        Invoke("Restart", 2f);
+
+        StartCoroutine(Restart());
     }
 
-    void Restart()
+    System.Collections.IEnumerator Restart()
     {
+        yield return new WaitForSeconds(2f);
+
+        Time.timeScale = 1f;
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
