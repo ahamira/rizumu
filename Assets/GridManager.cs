@@ -1,6 +1,6 @@
 using UnityEngine;
 using TMPro;
-
+using UnityEngine.SceneManagement;
 public class GridManager : MonoBehaviour
 {
     public static int width = 10;
@@ -9,6 +9,7 @@ public class GridManager : MonoBehaviour
 
     public TextMeshProUGUI scoreText;
     public static GridManager instance;
+    public GameObject gameOverText;
 
     public static Transform[,] grid = new Transform[10, 20];
 
@@ -64,5 +65,15 @@ public class GridManager : MonoBehaviour
                 }
             }
         }
+    }
+    public void GameOver()
+    {
+        gameOverText.SetActive(true);
+        Invoke("Restart", 2f);
+    }
+
+    void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

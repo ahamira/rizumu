@@ -17,10 +17,17 @@ public class Spawner : MonoBehaviour
         if (bag.Count == 0)
             FillBag();
 
-        Instantiate(bag[0], transform.position, Quaternion.identity);
+        GameObject piece = bag[0];
         bag.RemoveAt(0);
-    }
 
+        GameObject obj = Instantiate(piece, transform.position, Quaternion.identity);
+
+        if (!IsSpawnValid(obj))
+        {
+            GridManager.instance.GameOver();
+            return;
+        }
+    }
     void FillBag()
     {
         List<GameObject> temp = new List<GameObject>(pieces);
@@ -59,6 +66,18 @@ public class Spawner : MonoBehaviour
         for (int x = 0; x < GridManager.width; x++)
         {
             if (GridManager.grid[x, y] == null)
+                return false;
+        }
+        return true;
+    }
+    bool IsSpawnValid(GameObject obj)
+    {
+        foreach (Transform child in obj.transform)
+        {
+            int x = Mathf.RoundToInt(child.position.x);
+            int y = Mathf.RoundToInt(child.position.y);
+
+            if (GridManager.grid[x, y] != null)
                 return false;
         }
         return true;
