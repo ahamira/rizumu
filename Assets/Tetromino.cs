@@ -99,16 +99,32 @@ public class Tetromino : MonoBehaviour
         Lock();
     }
 
+
     void Lock()
     {
-        foreach (Transform child in transform)
-        {
-            int x = Mathf.RoundToInt(child.position.x);
-            int y = Mathf.RoundToInt(child.position.y);
+        Transform[] blocks = GetComponentsInChildren<Transform>();
 
-            GridManager.grid[x, y] = child;
-            child.parent = null; 
+        foreach (Transform block in blocks)
+        {
+            if (block == transform)
+                continue;
+
+            int x = Mathf.RoundToInt(block.position.x);
+            int y = Mathf.RoundToInt(block.position.y);
+
+            GridManager.grid[x, y] = block;
+            block.SetParent(null);
         }
+
+        Spawner spawner = FindFirstObjectByType<Spawner>();
+
+        if (spawner != null)
+        {
+            spawner.CheckLines();
+            spawner.SpawnNext();
+        }
+
+        Destroy(gameObject);
     }
 
     bool IsValid()
@@ -126,18 +142,5 @@ public class Tetromino : MonoBehaviour
                 return false;
         }
         return true;
-    }
-
-    void AddToGrid()
-    {
-        foreach (Transform child in transform)
-        {
-            int x = Mathf.RoundToInt(child.position.x);
-            int y = Mathf.RoundToInt(child.position.y);
-
-            GridManager.grid[x, y] = child;
-        }
-
-        FindObjectOfType<Spawner>().CheckLines();
     }
 }
