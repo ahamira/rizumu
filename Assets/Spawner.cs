@@ -35,6 +35,8 @@ public class Spawner : MonoBehaviour
 
     public void CheckLines()
     {
+        int linesCleared = 0;
+
         for (int y = 0; y < GridManager.height; y++)
         {
             if (IsFull(y))
@@ -42,7 +44,13 @@ public class Spawner : MonoBehaviour
                 GridManager.DeleteLine(y);
                 GridManager.MoveDown(y + 1);
                 y--;
+                linesCleared++;
             }
+        }
+
+        if (linesCleared > 0)
+        {
+            GridManager.AddScore(linesCleared);
         }
     }
 

@@ -1,10 +1,13 @@
 using UnityEngine;
-
+using TMPro;
 public class GridManager : MonoBehaviour
 {
     public static int width = 10;
     public static int height = 20;
+    public static int score = 0;
 
+    public TextMeshProUGUI scoreText;
+    public static GridManager instance;
     public static Transform[,] grid = new Transform[10, 20];
 
     public static bool Inside(int x, int y)
@@ -21,6 +24,22 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public static void AddScore(int lines)
+    {
+        switch (lines)
+        {
+            case 1: score += 100; break;
+            case 2: score += 300; break;
+            case 3: score += 500; break;
+            case 4: score += 800; break;
+        }
+
+        if (instance != null)
+        {
+            instance.scoreText.text = "Score: " + score;
+        }
+
+    }
     public static void MoveDown(int fromY)
     {
         for (int y = fromY; y < height; y++)
